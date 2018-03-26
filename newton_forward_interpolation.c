@@ -21,20 +21,27 @@ int fact(int n)
     else
         return n*fact(n-1);
 }
+double *allocate(int n)
+{
+	double *p = (double*)malloc(n*sizeof(double));
+	return p;
+}
+double **allocate2(int m, int n)
+{
+	double **arr = (double **)malloc(m*sizeof(double *));
+	for(int i=0; i<m; i++)
+		arr[i] = allocate(n);
+	return arr;
+}
 int main()
 {
 	printf("Enter in format\nFirst line >> size\nFollowing 2 lines >> X and Y\n\n");
 	int n;
 	scanf("%d", &n);
-	double *X = (double*)malloc(n*sizeof(double));
-	double *Y = (double*)malloc(n*sizeof(double));
-	double *theta = (double*)malloc(n*sizeof(double)), *coeff=(double*)malloc(n*sizeof(double));
-	double **A = (double **)malloc(n*sizeof(double *)), **tmp = (double **)malloc(n*sizeof(double *)), **d = (double **)malloc(n*sizeof(double *));
+	double *X = allocate(n), *Y = allocate(n), *theta = allocate(n), *coeff = allocate(n);
+	double **A = allocate2(n,n), **tmp = allocate2(n,n), **d = allocate2(n,n);
 	for(int i=0; i<n; i++)
 	{
-		A[i] = (double *)malloc(n*sizeof(double));
-		tmp[i] = (double *)malloc(n*sizeof(double));
-		d[i] = (double *)malloc(n*sizeof(double));
 		for(int j=0; j<n; j++)
 			d[i][j] = 0;
 	}
