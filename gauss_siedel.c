@@ -29,14 +29,14 @@ int main()
     double **arr = allocate2(n,n), **new = allocate2(n,n);
     double *co = allocate(n), *con = allocate(n), *a = allocate(n);
     int *avr = (int *)malloc(n*sizeof(int)), *perm = (int *)malloc(n*sizeof(int));
-    double ae, t, s, e=0;
-    int mxit=0, flag=1;
+    double errmax, tmp, sum=0, err=0;
+    int maxit=0, flag=1;
     for(int i=0; i<n; i++)  
         for(int j=0; j<n; j++)
             scanf("%lf", &arr[i][j]);//elements
 	for(int i=0; i<n; i++)
 		scanf("%lf", &co[i]);//constants    
-    scanf("%lf%d", &ae, &mxit);
+    scanf("%lf%d", &errmax, &maxit);
 
     for(int i=0; i<n; i++)
         {
@@ -46,14 +46,14 @@ int main()
         }
     for(int i=0; i<n; i++)
     {
-        int max=0; double sum=0;
+        int max=0; sum=0;
         for(int j=0; j<n; j++)
         {
             if(arr[i][j] > arr[i][max])
                 max = j;
-            sum += arr[i][j];
+            sum += fabs(arr[i][j]);
         }
-        if(arr[i][max] >= sum - arr[i][max])
+        if(fabs(arr[i][max]) >= sum - fabs(arr[i][max]))
         {
             if(max == i || avr[max])
             {    
@@ -83,23 +83,23 @@ int main()
     free2(arr,n,n); free(co); free(perm); free(avr);
     printf("\nIterations\t\tX\t\tY\t\tZ\n");
 
-    for(int r=1; r<=mxit; r++)
+    for(int iter=1; iter<=maxit; iter++)
     {
         for(int i=0; i<n; i++)
         {
-            s=0;
+            sum=0;
             for(int j=0; j<n; j++)
             if(j!=i) 
-                s += new[i][j] * a[j];
-            t = (con[i]-s)/new[i][i];
-            e = fabs(a[i]-t);
-            a[i] = t;
+                sum += new[i][j] * a[j];
+            tmp = (con[i]-sum)/new[i][i];
+            err = fabs(tmp - a[i]);
+            a[i] = tmp;
         }
-        printf("%9d\t",r);
-        for(int i=0;i<n;i++)
+        printf("%9d\t", iter);
+        for(int i=0; i<n; i++)
             printf("%7.7f\t",a[i]);
         printf("\n");
-        if(e < ae)
+        if(err <= errmax)
         {
             printf("Solution:\n");
             for(int i=0;i<n;i++)
