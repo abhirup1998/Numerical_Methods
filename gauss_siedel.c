@@ -49,7 +49,7 @@ int main()
         int max=0; sum=0;
         for(int j=0; j<n; j++)
         {
-            if(arr[i][j] > arr[i][max])
+            if(fabs(arr[i][j]) > fabs(arr[i][max]))
                 max = j;
             sum += fabs(arr[i][j]);
         }
