@@ -1,28 +1,42 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+void free2(double **arr, int m, int n)
+{
+	for(int i=0; i<m; i++)
+		free(arr[i]);
+	free(arr);
+}
+double *allocate(int n)
+{
+	double *p = (double*)malloc(n*sizeof(double));
+	for(int i=0; i<n; i++)
+		p[i] = 0;
+	return p;
+}
+double **allocate2(int m, int n)
+{
+	double **arr = (double **)malloc(m*sizeof(double *));
+	for(int i=0; i<m; i++)
+		arr[i] = allocate(n);
+	return arr;
+}
 int main()
 {
     printf("Enter in format\nFirst line >> size\nFollowing n+1 lines >> matrix and constants\nNext line >> Epsilon & No of Max Iterations\n\n");
     int n;
     scanf("%d", &n);
-    float **arr = (float **)malloc(n*sizeof(float *)), **new = (float **)malloc(n*sizeof(float *));
-    float *co = (float *)malloc(n*sizeof(float)), *con = (float *)malloc(n*sizeof(float)), *a = (float *)malloc(n * sizeof(float));
+    double **arr = allocate2(n,n), **new = allocate2(n,n);
+    double *co = allocate(n), *con = allocate(n), *a = allocate(n);
     int *avr = (int *)malloc(n*sizeof(int)), *perm = (int *)malloc(n*sizeof(int));
-    float ae, t, s, e=0;
+    double ae, t, s, e=0;
     int mxit=0, flag=1;
-    for(int i=0; i<n; i++)
-        {
-            arr[i] = (float *)malloc(n*sizeof(float));
-            new[i] = (float *)malloc(n*sizeof(float));
-        }
     for(int i=0; i<n; i++)  
         for(int j=0; j<n; j++)
-            scanf("%f", &arr[i][j]);//elements
+            scanf("%lf", &arr[i][j]);//elements
 	for(int i=0; i<n; i++)
-		scanf("%f", &co[i]);//constants    
-    scanf("%f%d", &ae, &mxit);
-
+		scanf("%lf", &co[i]);//constants    
+    scanf("%lf%d", &ae, &mxit);
 
     for(int i=0; i<n; i++)
         {
@@ -32,7 +46,7 @@ int main()
         }
     for(int i=0; i<n; i++)
     {
-        int max=0; float sum=0;
+        int max=0; double sum=0;
         for(int j=0; j<n; j++)
         {
             if(arr[i][j] > arr[i][max])
@@ -66,7 +80,8 @@ int main()
             new[i][j] = arr[perm[i]][j];
             con[i]=co[perm[i]];    
         }
-    printf("\nIteration\tSolutions\n");
+    free2(arr,n,n); free(co); free(perm); free(avr);
+    printf("\nIterations\t\tX\t\tY\t\tZ\n");
 
     for(int r=1; r<=mxit; r++)
     {
@@ -82,16 +97,17 @@ int main()
         }
         printf("%9d\t",r);
         for(int i=0;i<n;i++)
-            printf("%.7f\t",a[i]);
+            printf("%7.7f\t",a[i]);
         printf("\n");
         if(e < ae)
         {
-            printf("\nConverges in %3d iterations\n", r);
+            printf("Solution:\n");
             for(int i=0;i<n;i++)
-            printf("a[%d] = %7.7f\n", i+1, a[i]);
+            printf("%7.7f\t", a[i]);
             return 0;
         }
     }
+    free2(new,n,n); free(con); free(a);
 }
 // OUPUT...
 
@@ -103,22 +119,18 @@ int main()
 // 3
 // 3 2 1
 // 4 6 20
-// 4 9 1
-// 2 5 6
-// 0.00001 20
+// 2 7 2
+// 2 4 1
+// 0.000001 20
 
-// Iteration       Solutions
-//         1       0.6666667       0.3703704       0.0055556
-//         2       0.4179012       0.4803155       0.0223251
-//         3       0.3390146       0.5135129       0.0281432
-//         4       0.3149437       0.5235646       0.0299419
-//         5       0.3076429       0.5266096       0.0304885
-//         6       0.3054308       0.5275320       0.0306542
-//         7       0.3047606       0.5278115       0.0307044
-//         8       0.3045575       0.5278962       0.0307196
-//         9       0.3044960       0.5279218       0.0307243
-
-// Converges in   9 iterations
-// a[1] = 0.3044960
-// a[2] = 0.5279218
-// a[3] = 0.0307243
+// Iterations              X               Y               Z
+//         1       0.6666667       -0.0476191      0.0809524
+//         2       0.6714286       -0.0721089      0.0873469
+//         3       0.6856236       -0.0779916      0.0862728
+//         4       0.6899035       -0.0789075      0.0856915
+//         5       0.6907079       -0.0789713      0.0855498
+//         6       0.6907976       -0.0789564      0.0855274
+//         7       0.6907951       -0.0789493      0.0855258
+//         8       0.6907910       -0.0789476      0.0855261
+// Solution:
+// 0.6907910       -0.0789476      0.0855261

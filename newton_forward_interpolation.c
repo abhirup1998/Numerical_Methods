@@ -8,18 +8,18 @@ double eval_pol(double *pol, int degree, double point)
 		ans = ans * point + pol[i];
 	return ans;
 }
-void free2(double **arr, int m, int n)
-{
-	for(int i=0; i<m; i++)
-		free(arr[i]);
-	free(arr);
-}
 int fact(int n)
 {
     if(n==0)
         return 1;
     else
         return n*fact(n-1);
+}
+void free2(double **arr, int m, int n)
+{
+	for(int i=0; i<m; i++)
+		free(arr[i]);
+	free(arr);
 }
 double *allocate(int n)
 {
