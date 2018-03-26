@@ -42,11 +42,6 @@ int main()
 	scanf("%d", &n);
 	double *X = allocate(n), *Y = allocate(n), *theta = allocate(n), *coeff = allocate(n);
 	double **A = allocate2(n,n), **tmp = allocate2(n,n), **d = allocate2(n,n);
-	// for(int i=0; i<n; i++)
-	// {
-	// 	for(int j=0; j<n; j++)
-	// 		d[i][j] = 0;
-	// }
 	float m, prod=1, h;
 	for(int i=0; i<n; i++)
 		scanf("%lf", &X[i]);
